@@ -1,0 +1,27 @@
+# Rust
+/target
+**/*.rs.bk
+*.pdb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# Claude
+.claude/
+CLAUDE.md
