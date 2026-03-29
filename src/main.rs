@@ -6,7 +6,7 @@ mod display;
 mod server;
 
 #[derive(Parser)]
-#[command(name = "claude-meter", about = "Local OTLP collector for Claude Code telemetry")]
+#[command(name = "claude-meter", version, about = "Local OTLP collector for Claude Code telemetry")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
