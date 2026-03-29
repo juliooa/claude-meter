@@ -3,23 +3,25 @@ use comfy_table::{presets::UTF8_FULL, Table};
 use crate::db;
 
 pub fn show_summary(usage: &db::UsageSummary, label: &str) {
+    let total_input = usage.input_tokens + usage.cache_read_tokens + usage.cache_creation_tokens;
     println!("{}", label);
     println!("{}", "─".repeat(40));
-    println!("{:<28} {:>10}", "Tokens (input)", fmt_num(usage.input_tokens));
+    println!("{:<28} {:>10}", "Tokens (input)", fmt_num(total_input));
+    println!("{:<28} {:>10}", "  input", fmt_num(usage.input_tokens));
     println!(
         "{:<28} {:>10}",
-        "Tokens (output)",
-        fmt_num(usage.output_tokens)
-    );
-    println!(
-        "{:<28} {:>10}",
-        "Tokens (cache read)",
+        "  cache read",
         fmt_num(usage.cache_read_tokens)
     );
     println!(
         "{:<28} {:>10}",
-        "Tokens (cache creation)",
+        "  cache creation",
         fmt_num(usage.cache_creation_tokens)
+    );
+    println!(
+        "{:<28} {:>10}",
+        "Tokens (output)",
+        fmt_num(usage.output_tokens)
     );
     println!("{:<28} {:>10}", "Cost", fmt_cost(usage.cost));
     println!("{:<28} {:>10}", "Sessions", usage.sessions);
