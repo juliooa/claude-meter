@@ -102,13 +102,14 @@ async fn main() -> anyhow::Result<()> {
                 .unwrap()
                 .timestamp();
             let usage = db::query_usage(&conn, today_start)?;
-            display::show_summary(&usage, "Today");
+            display::show_summary(&usage, "Today", None);
         }
         Commands::Totals { db } => {
             let db_path = db.unwrap_or_else(default_db_path);
             let conn = db::open(&db_path)?;
+            let earliest = db::earliest_timestamp(&conn, 0)?;
             let usage = db::query_usage(&conn, 0)?;
-            display::show_summary(&usage, "All Time");
+            display::show_summary(&usage, "All Time", earliest);
         }
         Commands::History { days, db } => {
             let db_path = db.unwrap_or_else(default_db_path);

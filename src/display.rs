@@ -2,9 +2,16 @@ use comfy_table::{presets::UTF8_FULL, Table};
 
 use crate::db;
 
-pub fn show_summary(usage: &db::UsageSummary, label: &str) {
+pub fn show_summary(usage: &db::UsageSummary, label: &str, since: Option<i64>) {
     let total_input = usage.input_tokens + usage.cache_read_tokens + usage.cache_creation_tokens;
-    println!("{}", label);
+    match since {
+        Some(ts) => {
+            let dt = chrono::DateTime::from_timestamp(ts, 0).unwrap();
+            let formatted = dt.format("%a %d %b %Y");
+            println!("{} (since {})", label, formatted);
+        }
+        None => println!("{}", label),
+    }
     println!("{}", "─".repeat(40));
     println!("{:<28} {:>10}", "Tokens (input)", fmt_num(total_input));
     println!("{:<28} {:>10}", "  input", fmt_num(usage.input_tokens));

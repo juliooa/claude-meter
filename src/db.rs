@@ -234,6 +234,14 @@ pub fn query_by_session(conn: &Connection, since_ts: i64) -> anyhow::Result<Vec<
     Ok(rows)
 }
 
+pub fn earliest_timestamp(conn: &Connection, since_ts: i64) -> anyhow::Result<Option<i64>> {
+    Ok(conn.query_row(
+        "SELECT MIN(timestamp) FROM metrics WHERE timestamp >= ?1",
+        params![since_ts],
+        |row| row.get(0),
+    )?)
+}
+
 pub fn count_before(conn: &Connection, cutoff_ts: i64) -> anyhow::Result<i64> {
     Ok(conn.query_row(
         "SELECT COUNT(*) FROM metrics WHERE timestamp < ?1",
