@@ -2,6 +2,8 @@
 
 A lightweight Rust CLI that acts as a local OTLP HTTP/protobuf collector for Claude Code telemetry. It receives metrics from Claude Code, stores them in SQLite, and provides CLI commands to query usage data — tokens, costs, sessions, and more.
 
+![claude-meter totals](screenshot.png)
+
 ## Install
 
 ```bash
