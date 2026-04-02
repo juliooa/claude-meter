@@ -34,11 +34,12 @@ You can add these exports to your shell profile (`~/.zshrc`, `~/.bashrc`) so the
 ### 3. Query your data
 
 ```bash
-claude-meter summary       # today's usage
+claude-meter today         # today's usage
 claude-meter totals        # all-time totals
 claude-meter history       # daily breakdown (last 7 days)
 claude-meter by-model      # usage per model
 claude-meter by-session    # usage per session
+claude-meter --version     # show version
 ```
 
 ## Commands
@@ -51,19 +52,20 @@ Start the OTLP collector server.
 claude-meter serve [--port 4318] [--db ~/.claude-meter/metrics.db]
 ```
 
-### `claude-meter summary`
+### `claude-meter today`
 
 Today's usage summary.
 
 ```
-$ claude-meter summary
+$ claude-meter today
 
 Today
 ────────────────────────────────────────
-Tokens (input)                   12,450
+Tokens (input)                   65,550
+  input                          12,450
+  cache read                     45,000
+  cache creation                  8,100
 Tokens (output)                   3,200
-Tokens (cache read)              45,000
-Tokens (cache creation)           8,100
 Cost                              $0.42
 Sessions                              1
 Lines added                         156
@@ -73,10 +75,23 @@ Active time                     23m 15s
 
 ### `claude-meter totals`
 
-All-time totals (same format as summary).
+All-time totals with earliest data date.
 
 ```
-claude-meter totals [--db PATH]
+$ claude-meter totals
+
+All Time (since Sat 22 Mar 2026)
+────────────────────────────────────────
+Tokens (input)                3,823,111
+  input                             492
+  cache read                  3,558,147
+  cache creation                264,472
+Tokens (output)                  28,541
+Cost                              $3.62
+Sessions                             10
+Lines added                          96
+Lines removed                         7
+Active time                     17m 57s
 ```
 
 ### `claude-meter history`
@@ -141,6 +156,15 @@ Deleted 142 row(s).
 
 Supported duration formats: `30d` (days), `6m` (months), `1y` (years).
 
+### `claude-meter --version`
+
+Show the installed version.
+
+```
+$ claude-meter --version
+claude-meter 0.1.0
+```
+
 ## Global Options
 
 All query commands accept `--db <PATH>` to use a custom database location. Default: `~/.claude-meter/metrics.db`.
@@ -168,8 +192,8 @@ tests/
 ## Building from Source
 
 ```bash
-git clone <repo-url>
-cd tokens_tracker
+git clone https://github.com/juliooa/claude-meter.git
+cd claude-meter
 cargo build --release
 ```
 

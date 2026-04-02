@@ -22,7 +22,7 @@ enum Commands {
         db: Option<PathBuf>,
     },
     /// Show today's usage summary
-    Summary {
+    Today {
         #[arg(long)]
         db: Option<PathBuf>,
     },
@@ -91,7 +91,7 @@ async fn main() -> anyhow::Result<()> {
             let db_path = db.unwrap_or_else(default_db_path);
             server::run(port, db_path).await?;
         }
-        Commands::Summary { db } => {
+        Commands::Today { db } => {
             let db_path = db.unwrap_or_else(default_db_path);
             let conn = db::open(&db_path)?;
             let today_start = chrono::Local::now()
