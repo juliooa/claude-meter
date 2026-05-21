@@ -60,11 +60,26 @@ enum Commands {
     },
 }
 
+/// Resolve the user's home directory cross-platform.
+/// Unix/macOS use `HOME`; Windows uses `USERPROFILE` (or `HOMEDRIVE`+`HOMEPATH`).
+fn home_dir() -> PathBuf {
+    for var in ["HOME", "USERPROFILE"] {
+        if let Ok(val) = std::env::var(var) {
+            if !val.is_empty() {
+                return PathBuf::from(val);
+            }
+        }
+    }
+    if let (Ok(drive), Ok(path)) = (std::env::var("HOMEDRIVE"), std::env::var("HOMEPATH")) {
+        if !drive.is_empty() && !path.is_empty() {
+            return PathBuf::from(format!("{drive}{path}"));
+        }
+    }
+    panic!("Could not determine home directory (set HOME or USERPROFILE)");
+}
+
 fn default_db_path() -> PathBuf {
-    let home = std::env::var("HOME").expect("HOME not set");
-    PathBuf::from(home)
-        .join(".claude-meter")
-        .join("metrics.db")
+    home_dir().join(".claude-meter").join("metrics.db")
 }
 
 fn parse_duration_to_secs(s: &str) -> anyhow::Result<i64> {
